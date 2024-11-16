@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #FFF;
+            font-size: 28px;
+            font-family: E-SQUARE;
+            letter-spacing: 1px;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 18px;
+            background: linear-gradient(50deg, #c2c9e0 0%, #d4bddd 100%);
+            background-size: 200% 200%;
+            animation: gra 8s ease infinite;
+        }
+        #t1 { padding-top: 6px; }
+        #t2 {
+            font-size: 76px;
+            letter-spacing: 6px;
+        }
+        @keyframes gra {
+            0% { background-position: 10% 90%; }
+            50% { background-position: 90% 10%; }
+            100% { background-position: 10% 90%; }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div id="t1"></div>
+        <div id="t2"></div>
+    </main>
+    <script>
+        const t1 = document.querySelector("#t1");
+        const t2 = document.querySelector("#t2");
+        (function render() {
+            requestAnimationFrame(render);
+            const dt = new Date();
+            const [date, time] = dt.toLocaleString('sv').split(" ");
+            const [hh, mm] = time.split(":");
+            const day = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"][dt.getDay()];
+            t1.textContent = `${date} ${day}`;
+            t2.textContent = `${hh}:${mm}`;
+        })();
+    </script>
+</body>
+</html>
