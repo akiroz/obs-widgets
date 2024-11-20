@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <style>
         body {
@@ -43,6 +42,8 @@
 
         .text {
             fill: #fff;
+            text-anchor: middle;
+            dominant-baseline: middle;
         }
         #text1 {
             font-size: 40px;
@@ -81,7 +82,6 @@
         .tip:hover {
             background: #ccc;
         }
-
         @keyframes hideSection {
             0% {
                 transform: scaleX(1);
@@ -90,6 +90,7 @@
                 transform: scaleX(0);
             }
         }
+
         @keyframes blink {
             0% {
                 fill: #fff;
@@ -109,14 +110,14 @@
             <circle class="progress-track" r="90" cx="100" cy="100"></circle>
             <circle class="progress-bar" id="progress1" r="15.9155" cx="100" cy="100"></circle>
             <circle class="progress-bar" id="progress2" r="15.9155" cx="100" cy="100"></circle>
-            <text class="text" id="text1" text-anchor="middle" dominant-baseline="middle" x="100" y="100"></text>
-            <text class="text" id="text2" text-anchor="middle" dominant-baseline="middle" x="100" y="130"></text>
+            <text class="text" id="text1" x="100" y="100"></text>
+            <text class="text" id="text2" x="100" y="130"></text>
         </svg>
     </main>
     <summary>
         <span class="tip" id="close" onclick="hideInfo()">X</span>
         <p>
-            Timer Controls:<br>
+            Timer v0.1<br>
             [Escape] Reset<br>
             [Space] Pause<br>
             [u] Start (Count Up)<br>
@@ -129,7 +130,6 @@
     <script>
         const main = document.querySelector("main");
         const info = document.querySelector("summary");
-
         function resetAnimation(cb) {
             main.style.opacity = 0;
             info.style.opacity = 0;
@@ -141,18 +141,14 @@
                 cb();
             });
         }
-        function showInfo() {
-            resetAnimation(() => {
-                main.style.animation = "0.15s ease-in both hideSection";
-                info.style.animation = "0.15s ease-out 0.15s reverse both hideSection";
-            });
-        }
-        function hideInfo() {
-            resetAnimation(() => {
-                main.style.animation = "0.15s ease-out 0.15s reverse both hideSection";
-                info.style.animation = "0.15s ease-in both hideSection";
-            });
-        }
+        const showInfo = () => resetAnimation(() => {
+            main.style.animation = "0.15s ease-in both hideSection";
+            info.style.animation = "0.15s ease-out 0.15s reverse both hideSection";
+        });
+        const hideInfo = () => resetAnimation(() => {
+            main.style.animation = "0.15s ease-out 0.15s reverse both hideSection";
+            info.style.animation = "0.15s ease-in both hideSection";
+        });
 
         const p1 = document.querySelector("#progress1");
         const p2 = document.querySelector("#progress2");
@@ -208,5 +204,4 @@
         }
     </script>
 </body>
-
 </html>

@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <style>
         body {
             width: 400px;
             height: 400px;
-            font-family: sans-serif;
+            font-family: Hiragino Maru Gothic Pro;
             color: #fff;
         }
         main {
             position: absolute;
+        }
+        main svg {
             width: 100vw;
             height: 100vh;
         }
-        main svg {
-            margin: 0 auto;
-            height: 100%
-        }
-        .text {
+        main svg .text {
             fill: #fff;
-            font-size: 30px;
-            stroke: #333;
+            font-size: 20px;
+            stroke: #5F989E;
             stroke-width: 4px;
             paint-order: stroke;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
+            text-anchor: middle;
         }
-        #text2 {
-            font-size: 24px;
+        #text1 {
+            font-size: 28px;
+        }
+        #text1 > tspan {
+            font-size: 12px;
+            stroke-width: 3px;
         }
 
         summary {
@@ -41,7 +43,6 @@
         summary p {
             padding-left: 20px;
             font-size: 24px;
-            font-family: monospace;
         }
 
         .tip {
@@ -49,8 +50,7 @@
             top: 10px;
             right: 10px;
             width: 25px;
-            height: 23px;
-            padding-top: 2px;
+            height: 25px;
             font-size: 20px;
             text-align: center;
             background: #888;
@@ -58,6 +58,10 @@
         }
         .tip:hover {
             background: #ccc;
+        }
+        .tip > span {
+            position: relative;
+            top: -3px;
         }
 
         @keyframes hideSection {
@@ -70,10 +74,11 @@
         }
     </style>
 </head>
-
 <body>
     <main>
-        <span class="tip" id="info" onclick="showInfo()">i</span>
+        <span class="tip" id="info" onclick="showInfo()">
+            <span>i</span>
+        </span>
         <svg viewBox="0 0 128 128">
             <defs/>
             <path d="M42.09,113.09 C42.09,113.09 41.64,117.27 42.39,118.61 C43.14,119.95 47.02,124.43 63.58,124.73 C80.14,125.03 84.77,120.25 85.36,119.36 C85.96,118.46 85.36,113.54 85.36,113.54 L42.09,113.09 Z" fill="#5F989E"/>
@@ -84,14 +89,19 @@
             <path d="M78.16,62.57 C82.67,61.55 86.37,60.09 89.2,58.44 C90.14,57.89 85.39,51.31 66.96,50.94 C62.58,50.85 59.68,51.44 59.64,52.61 C59.55,55.39 67.02,54.01 71.59,56.5 C75.52,58.63 77.33,60.75 78.16,62.57 Z" fill="#AAD876"/>
             <path d="M61.2,16 C60.7,15.7 56.88,17.54 53.31,19.61 C48.48,22.41 43.81,26.85 45.11,34.54 C46.63,43.56 60.21,46.02 61.13,45.28 C62.06,44.54 54.61,37.37 55.5,30.36 C56.45,22.84 63.24,17.21 61.2,16 Z" fill="#DCEDF6" opacity="0.6"/>
             <path d="M71.28,2.06 C68.72,4.9 76.07,6.68 72.96,12.98 C69.85,19.28 60.45,22.8 60.45,31.87 C60.45,40.94 71.37,46.73 72.54,45.81 C73.72,44.89 70.32,38.14 75.73,31.96 C81.61,25.24 87.32,18.78 83.87,9.79 C80.85,1.9 72.79,0.38 71.28,2.06 Z" fill="#DCEDF6" opacity="0.6"/>
-            <text class="text" id="text1" text-anchor="middle" dominant-baseline="middle" x="64" y="75"></text>
-            <text class="text" id="text2" text-anchor="middle" dominant-baseline="middle" x="64" y="100"></text>
+            <text class="text" id="text1" x="65" y="80">
+                00
+                <tspan>Hr</tspan>
+            </text>
+            <text class="text" id="text2" x="65" y="102"></text>
         </svg>
     </main>
     <summary>
-        <span class="tip" id="close" onclick="hideInfo()">X</span>
+        <span class="tip" id="close" onclick="hideInfo()">
+            <span>X</span>
+        </span>
         <p>
-            Timer Controls:<br>
+            Teacup Timer v0.1<br>
             [Escape] Reset<br>
             [Space] Pause<br>
             [u] Start (Count Up)<br>
@@ -104,7 +114,6 @@
     <script>
         const main = document.querySelector("main");
         const info = document.querySelector("summary");
-
         function resetAnimation(cb) {
             main.style.opacity = 0;
             info.style.opacity = 0;
@@ -116,28 +125,24 @@
                 cb();
             });
         }
-        function showInfo() {
-            resetAnimation(() => {
-                main.style.animation = "0.15s ease-in both hideSection";
-                info.style.animation = "0.15s ease-out 0.15s reverse both hideSection";
-            });
-        }
-        function hideInfo() {
-            resetAnimation(() => {
-                main.style.animation = "0.15s ease-out 0.15s reverse both hideSection";
-                info.style.animation = "0.15s ease-in both hideSection";
-            });
-        }
+        const showInfo = () => resetAnimation(() => {
+            main.style.animation = "0.15s ease-in both hideSection";
+            info.style.animation = "0.15s ease-out 0.15s reverse both hideSection";
+        });
+        const hideInfo = () => resetAnimation(() => {
+            main.style.animation = "0.15s ease-out 0.15s reverse both hideSection";
+            info.style.animation = "0.15s ease-in both hideSection";
+        });
 
-        
         const t1 = document.querySelector("#text1");
         const t2 = document.querySelector("#text2");
         function render(dt, state, offset) {
             const adt = Math.max(dt, 0);
             const hh = String(Math.floor(adt / 3600000)).padStart(2, "0");
             const mm = String(Math.floor((adt / 60000) % 60)).padStart(2, "0");
-            t1.textContent = `${hh}:${mm}`;
-            t2.textContent = String(Math.floor((adt / 1000) % 60)).padStart(2, "0");
+            const ss = String(Math.floor((adt / 1000) % 60)).padStart(2, "0");
+            t1.childNodes[0].textContent = hh;
+            t2.textContent = `${mm}:${ss}`;
         };
 
         {
@@ -168,5 +173,4 @@
         }
     </script>
 </body>
-
 </html>
