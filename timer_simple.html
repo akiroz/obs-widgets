@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--
+Timer Controls:
+[u]         Count Up
+[d]         Count Down
+[Space]     Pause
+[Escape]    Reset Timer
+[s]         Add 1 second
+[m]         Add 1 minute
+[h]         Add 1 hour
+-->
+<html>
+<head>
+    <style>
+        .text {
+            font-family: sans-serif;
+            color: #ffffff;
+        }
+        #hhmmss { /* hour, minute, second part */
+            font-size: 80px;
+        }
+        #ms { /* millisecond part */
+            font-size: 30px;
+            margin-left: 5px;
+            display: none; /* hide ms part */
+        }
+        #box {
+            background: transparent;
+            border: none; /* hide border */
+            /* border: 3px solid #ffffff; */
+            border-radius: 10px;
+            padding: 10px;
+        }
+        body {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <main id="box">
+        <span class="text" id="hhmmss"></span>
+        <span class="text" id="ms"></span>
+    </main>
+
+    <script>
+        const hhmmssElement = document.querySelector("#hhmmss");
+        const msElement = document.querySelector("#ms");
+        function render(dt, state, offset) {
+            const adt = Math.max(dt, 0);
+            const h = adt / 3600000;
+            const hh = String(Math.floor(h)).padStart(2, "0");
+            const m = (adt / 60000) % 60;
+            const mm = String(Math.floor(m)).padStart(2, "0");
+            const s = (adt / 1000) % 60;
+            const ss = String(Math.floor(s)).padStart(2, "0");
+            const ms = Math.floor(adt % 1000);
+            const ms3 = String(ms).padStart(3, "0");
+
+            hhmmssElement.textContent = `${hh}:${mm}:${ss}`;
+            msElement.textContent = `${ms3}`;
+        };
+
+        {
+            let t0 = 0, t1 = 0, s0 = 0, s = 0, o = 0;
+            (function tick(t) {
+                const st = Number.isFinite(t1);
+                const sc = s != s0 || st;
+                if (sc) {
+                    if (st) t0 = t, o = t1, t1 = null;
+                    if (s0) o += s0 * (t - t0);
+                    if (s) t0 = t;
+                    s0 = s;
+                }
+                if (s || sc) render(t ? o + (s * (t - t0)) : 0, s, o);
+                requestAnimationFrame(tick);
+            })();
+
+            addEventListener("keydown", ({ key }) => {
+                console.log(key);
+                if (key == " ") s = 0;
+                if (key == "u") s = 1;
+                if (key == "d") s = -1;
+                if (key == "Escape") s = 0, t1 = 0;
+                if (key == "s") s = 0, requestAnimationFrame(() => t1 = o + 1000);
+                if (key == "m") s = 0, requestAnimationFrame(() => t1 = o + 60000);
+                if (key == "h") s = 0, requestAnimationFrame(() => t1 = o + 3600000);
+            });
+        }
+    </script>
+</body>
+</html>
